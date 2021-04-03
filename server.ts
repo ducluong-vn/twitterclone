@@ -5,7 +5,9 @@ import express, { Request, Response, NextFunction } from "express"
 import cors from "cors"
 import mongoose, { Types } from "mongoose"
 import tweetRoutes from "./routes/tweetRoutes"
+import path from "path"
 
+// Add custom properties to Request
 declare global {
 	namespace Express {
 		interface Request {
@@ -23,9 +25,23 @@ mongoose.connect(
 	"mongodb://localhost/notReddit",
 	{ useNewUrlParser: true, useUnifiedTopology: true },
 	() => {
-		console.log("Connected to mongodb")
+		console.log("Connected to server")
 	}
 )
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/build")))
+
+	app.get("*", (req: Request, res: Response) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+	})
+}
+
+app.get("/", (req: Request, res: Response) => {
+	res.json({
+		message: "Success",
+	})
+})
 
 app.use("/api/tweets", tweetRoutes)
 

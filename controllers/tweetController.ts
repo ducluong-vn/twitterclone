@@ -22,15 +22,11 @@ interface IBaseTweet {
 	can_be_deleted?: boolean
 }
 
-interface PublicRequest extends Request {
-	user_id?: Types.ObjectId
-}
-
-interface PrivateRequest extends Request {
-	user_id: Types.ObjectId
-	username: string
-}
-
+/**
+ * Change the shape of 'tweet' to fit frontend requirements
+ * @param tweet tweet from database
+ * @param user_id id of current user
+ */
 function frontendTweet(tweet: ITweet, user_id?: Types.ObjectId): IBaseTweet {
 	const reducedTweet: IBaseTweet = {
 		user_id: tweet.user_id,
@@ -60,7 +56,7 @@ function frontendTweet(tweet: ITweet, user_id?: Types.ObjectId): IBaseTweet {
  * @access Public
  */
 const getAllTweets = async (
-	req: PublicRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -101,7 +97,7 @@ const getAllTweets = async (
  * @access Public
  */
 const getTweetDetails = async (
-	req: PublicRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -179,7 +175,7 @@ const getTweetDetails = async (
  * @access Private
  */
 const createATweet = async (
-	req: PrivateRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -203,7 +199,7 @@ const createATweet = async (
  * @access Private
  */
 const createAComment = async (
-	req: PrivateRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -259,7 +255,7 @@ const createAComment = async (
  * @access Private
  */
 const loveATweet = async (
-	req: PrivateRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -295,7 +291,7 @@ const loveATweet = async (
  * @access Private
  */
 const deleteATweet = async (
-	req: PrivateRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
